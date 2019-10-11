@@ -35,6 +35,7 @@ video.addEventListener("play", ()=>{
     document.body.append(canvas)
     //get the display size of our current video, so that canvas can be sized over the video
     const displaySize = {width: video.width, height: video.height}
+    faceapi.matchDimensions(canvas,displaySize)
     //Has to be async function since its async library
     setInterval(async() => {
         //gets all the faces inside the webcam image everytime its called (100 ms)
@@ -45,7 +46,10 @@ video.addEventListener("play", ()=>{
         console.log(detections)
         //boxes that show up around the face are resized for the video and canvas element
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        canvas.getContext("2d").clearRect(0,0,canvas.width, canvas.height)
         //drawing onto canvas
         faceapi.draw.drawDetections(canvas, resizedDetections)
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
     }, 100)
 })
