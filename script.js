@@ -29,6 +29,12 @@ function startVideo(){
 //add event listener for when the video starts playing
 //when it starts playing, start recognizing the face
 video.addEventListener("play", ()=>{
+    //canvas has to be positioned directly above the video element
+    const canvas = faceapi.createCanvasFromMedia(video)
+    //add that canvas to the screen
+    document.body.append(canvas)
+    //get the display size of our current video, so that canvas can be sized over the video
+    const displaySize = {width: video.width, height: video.height}
     //Has to be async function since its async library
     setInterval(async() => {
         //gets all the faces inside the webcam image everytime its called (100 ms)
@@ -37,5 +43,9 @@ video.addEventListener("play", ()=>{
         new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks
         ().withFaceExpressions()
         console.log(detections)
+        //boxes that show up around the face are resized for the video and canvas element
+        const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        //drawing onto canvas
+        faceapi.draw.drawDetections(canvas, resizedDetections)
     }, 100)
 })
