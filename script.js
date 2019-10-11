@@ -6,7 +6,7 @@ const video = document.getElementById("video")
 //it takes .then
 Promise.all([
     //face detector that runs real time
-    faceapi.nets.tnyFaceDetector.loadFromUri('/models'),
+    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
     //registers difference part of the face.
     faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
     //Allow API to recognize where my face is and the box around it
@@ -29,5 +29,13 @@ function startVideo(){
 //add event listener for when the video starts playing
 //when it starts playing, start recognizing the face
 video.addEventListener("play", ()=>{
-    console.log("testtt")
+    //Has to be async function since its async library
+    setInterval(async() => {
+        //gets all the faces inside the webcam image everytime its called (100 ms)
+        //passed in video element and the libraries to use
+        const detections = await faceapi.detectAllFaces(video,
+        new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks
+        ().withFaceExpressions()
+        console.log(detections)
+    }, 100)
 })
