@@ -48,8 +48,11 @@ video.addEventListener("play", ()=>{
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
         canvas.getContext("2d").clearRect(0,0,canvas.width, canvas.height)
         //drawing onto canvas
+        //draw detections
         faceapi.draw.drawDetections(canvas, resizedDetections)
+        //draw landmarks
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        //draw expressions
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
     }, 100)
 })
